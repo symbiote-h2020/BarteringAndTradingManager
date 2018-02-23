@@ -10,4 +10,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * @author jamsellem
  */
 public interface CouponRepository extends MongoRepository<Coupon, String>,CouponRepositoryCustom {
+    public Coupon findById(String id);
 }

@@ -21,4 +21,25 @@ public class CouponService {
         return couponRepo.findValidCouponByResourceTypeAndFedId(resourceType,fedIdentifier,limit);
     }
 
+    public Coupon createCoupon(Coupon cupon){
+        try{
+            return couponRepo.save(cupon);
+        }catch (javax.validation.ConstraintViolationException ex){
+            return null;
+        }
+
+    }
+
+
+    public Coupon findById(String id){
+        return couponRepo.findById(id);
+    }
+
+    public Coupon update(Coupon coupon){
+        return couponRepo.save(coupon);
+    }
+
+    public void delete(Coupon coupon){ couponRepo.delete(coupon); }
+
+
 }
