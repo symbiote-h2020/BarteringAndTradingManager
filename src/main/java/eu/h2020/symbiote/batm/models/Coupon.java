@@ -65,6 +65,18 @@ public class Coupon {
     private Boolean singleUse;
 
 
+    public Coupon(){}
+
+    public Coupon(Coupon c) {
+        this.id = c.id;
+        this.usedBy = c.usedBy;
+        this.issuer = c.issuer;
+        this.beneficiary = c.beneficiary;
+        this.fedIdentifier = c.fedIdentifier;
+        this.resourceType = c.resourceType;
+        this.expirationDate = c.expirationDate;
+        this.singleUse = c.singleUse;
+    }
 
     public String getId(){ return id;}
 
