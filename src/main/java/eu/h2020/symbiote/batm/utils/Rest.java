@@ -62,7 +62,7 @@ public class Rest <T extends BaseModel> {
 
 
 
-    public Boolean postReturningBooelanOrNull(String url, Map<String, String> params, HttpHeaders headers, Object request ){
+    public Boolean postBooleanReturn(String url, Map<String, String> params, HttpHeaders headers, Object request ){
         RestTemplate restTemplate = new RestTemplate();
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);

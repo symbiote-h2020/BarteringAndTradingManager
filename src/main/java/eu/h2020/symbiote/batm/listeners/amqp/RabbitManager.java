@@ -58,7 +58,6 @@ public class RabbitManager {
     @Value("${rabbit.routingKey.checkCouponStatus.request}")
     private String checkCouponStatusRoutingKey;
 
-
     @Autowired
     public RabbitManager() {
     }
@@ -191,5 +190,13 @@ public class RabbitManager {
             logger.error(e);
         }
     }
+
+
+    public String getExchangeName(){return this.exchangeName;}
+    public String getCheckCouponStatusRoutingKey(){return this.exchangeName;}
+    public String getCheckCouponStatusQueue(){return this.checkCouponStatusQueue;}
+    public String getAdminUsername(){return this.adminUsername;}
+    public String getAdminPassword(){return this.adminPassword;}
+
 
 }

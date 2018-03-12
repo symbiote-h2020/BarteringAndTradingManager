@@ -21,7 +21,7 @@ public class CouponService {
         return couponRepo.findValidCouponByResourceTypeAndFedId(resourceType,fedIdentifier,limit);
     }
 
-    public Coupon createCoupon(Coupon cupon){
+    public Coupon save(Coupon cupon){
         try{
             return couponRepo.save(cupon);
         }catch (javax.validation.ConstraintViolationException ex){

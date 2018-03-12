@@ -9,19 +9,14 @@ import eu.h2020.symbiote.security.communication.payloads.Credentials;
 public class CheckCouponStatusRequest {
 
     private final Credentials adminCredentials;
-    private final Coupon coupon;
-    private final CouponType type;
+    private final String type;
     private final String platformURL;
-
-    public enum CouponType { CREATED, RESEND }
 
 
     public CheckCouponStatusRequest(@JsonProperty("adminCredentials") Credentials adminCredentials,
-                                    @JsonProperty("coupon") Coupon coupon,
-                                    @JsonProperty("type") CouponType type,
+                                    @JsonProperty("resourceType") String type,
                                     @JsonProperty("platformUrl") String platformURL) {
         this.adminCredentials = adminCredentials;
-        this.coupon = coupon;
         this.type = type;
         this.platformURL = platformURL;
     }
@@ -29,9 +24,9 @@ public class CheckCouponStatusRequest {
 
     public Credentials getAdminCredentials() { return adminCredentials; }
 
-    public Coupon getCoupon() { return coupon; }
+//    public Coupon getCoupon() { return coupon; }
 
-    public CouponType getType() { return type; }
+    public String getType() { return type; }
 
     public String getPlatformURL() { return platformURL; }
 }

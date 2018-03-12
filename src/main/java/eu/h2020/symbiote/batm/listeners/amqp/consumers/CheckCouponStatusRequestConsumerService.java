@@ -1,6 +1,7 @@
 package eu.h2020.symbiote.batm.listeners.amqp.consumers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
@@ -67,15 +68,16 @@ public class CheckCouponStatusRequestConsumerService extends DefaultConsumer {
          *      validate deal
          *      store coupon
          *
-         *  consume coupon
-         *  notify core about coupon consumption
+         *   else
+         *      consume coupon
+         *      notify core about coupon consumption
+         *
          *  RAP ack
          *
          *
          */
 
         CheckCouponStatusRequest request;
-
 
         String message = new String(body, "UTF-8");
         ObjectMapper om = new ObjectMapper();
@@ -100,10 +102,10 @@ public class CheckCouponStatusRequestConsumerService extends DefaultConsumer {
 
                 // ask platform for coupon
                 CouponDTO couponDto = rest.get(request.getPlatformURL(),null,null, CouponDTO.class );
-                Coupon c = null;
+
                 if (couponDto.isNew) {
                     //  ask core if coupon is valid
-                    Boolean isValid = rest.postReturningBooelanOrNull(this.coreUrl+"/isvalid",null,null, couponDto.coupon );
+                    Boolean isValid = rest.postBooleanReturn(this.coreUrl+"/isvalid",null,null, couponDto.coupon );
 
                     if (isValid){
                         //  validate deal
@@ -114,40 +116,39 @@ public class CheckCouponStatusRequestConsumerService extends DefaultConsumer {
                         couponDto.coupon.addToUsedByList(beneficiary);
 
                         //  store coupon
-                        c = couponService.createCoupon(couponDto.coupon);
+                        couponService.save(couponDto.coupon);
                     }
-                }
+                    else{
+                        // TODO -- cancel deal
+                    }
+                }else if (!couponDto.isNew){
 
-                 c = (c != null) ? c : couponService.findById(couponDto.coupon.id);
-
-
-                if (c != null ){
+                    String beneficiary = couponDto.coupon.getBeneficiary();
 
                     // consume coupon
-                    c.addToUsedByList(c.getBeneficiary().isEmpty()? "someone":c.getBeneficiary());
-                    couponService.update(c);
-
+                    couponDto.coupon.addToUsedByList(beneficiary);
 
                     // notify core about coupon consumption
-                    Boolean use = rest.postReturningBooelanOrNull(this.coreUrl+"/use/"+myPlatformId,null,null, couponDto.coupon );
+                    Boolean use = rest.postBooleanReturn(this.coreUrl+"/use/"+myPlatformId,null,null, couponDto.coupon );
                 }
-
 
             } catch (InvalidArgumentsException | UserManagementException e) {
                 response = (new ErrorResponseContainer(e.getErrorMessage(), e.getStatusCode().ordinal())).toJson();
+                logger.error("InvalidArgumentsException | UserManagementException > " + e.getMessage());
             } finally {
                 // RAP ack
                 response = response.isEmpty()?"OK":response;
-                this.getChannel().basicPublish("", properties.getReplyTo(), replyProps, response.getBytes());
+                logger.error("response " + response);
+//                this.getChannel().basicPublish("", properties.getReplyTo(), replyProps, response.getBytes());
             }
 
         }else{
             logger.error("Received RPC message without ReplyTo or CorrelationId properties.");
         }
 
-
-        // RAP ack
+//        // RAP ack
         this.getChannel().basicAck(envelope.getDeliveryTag(), false);
+
     }
 
 }

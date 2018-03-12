@@ -1,9 +1,22 @@
 package eu.h2020.symbiote.batm.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.data.annotation.Id;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,8 +33,7 @@ public class Coupon {
      * coupon identifier
      */
     @Id
-    @NotBlank
-    public String id;
+    private String id;
 
     /**
      * user history
@@ -118,3 +130,5 @@ public class Coupon {
         this.usedBy.add(usedBy);
     }
 }
+
+

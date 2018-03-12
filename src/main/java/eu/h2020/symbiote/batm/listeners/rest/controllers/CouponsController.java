@@ -75,7 +75,7 @@ public class CouponsController implements ICoupons {
 
 
             // notify core about coupon creation
-            Boolean use = new Rest<CouponDTO>().postReturningBooelanOrNull(this.coreUrl+"/create",null,null, dto.coupon );
+            Boolean use = new Rest<CouponDTO>().postBooleanReturn(this.coreUrl+"/create",null,null, dto.coupon );
         }
         return new ResponseEntity<CouponDTO>(dto, null, HttpStatus.OK);
     }

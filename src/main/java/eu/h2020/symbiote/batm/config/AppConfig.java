@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
@@ -21,8 +22,8 @@ import java.util.Arrays;
  *
  * @author jamsellem
  */
-@Configuration
 @EnableMongoRepositories("eu.h2020.symbiote.batm.repositories")
+@Configuration
 class AppConfig extends AbstractMongoConfiguration {
 
     private static Log logger = LogFactory.getLog(AppConfig.class);
